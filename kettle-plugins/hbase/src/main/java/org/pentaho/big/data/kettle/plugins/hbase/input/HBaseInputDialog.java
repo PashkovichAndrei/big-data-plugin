@@ -1264,8 +1264,8 @@ public class HBaseInputDialog extends BaseStepDialog implements StepDialogInterf
       zookeeperQuorumText = nc.getZooKeeperHost();
     }
 
-    boolean displayFieldsEmbeddedMapping =
-      ( ( m_mappingEditor.getMapping( false, null, false ) != null && Const.isEmpty( m_mappingNamesCombo.getText() ) ) );
+    Mapping temp = m_mappingEditor.getMapping( false, null, false );
+    boolean displayFieldsEmbeddedMapping = temp != null && Const.isEmpty( m_mappingNamesCombo.getText() );
     boolean displayFieldsMappingFromHBase =
       ( !Const.isEmpty( m_coreConfigText.getText() ) || !Const.isEmpty( zookeeperQuorumText ) )
         && !Const.isEmpty( m_mappedTableNamesCombo.getText() ) && !Const.isEmpty( m_mappingNamesCombo.getText() );
@@ -1291,6 +1291,8 @@ public class HBaseInputDialog extends BaseStepDialog implements StepDialogInterf
             current =
               admin.getMapping( transMeta.environmentSubstitute( m_mappedTableNamesCombo.getText() ), transMeta
                 .environmentSubstitute( m_mappingNamesCombo.getText() ) );
+          } else if ( temp.getKeyName() != null && !temp.getKeyName().isEmpty() ) {
+            current = m_mappingEditor.getMapping(false, null, false);
           } else {
             current = m_mappingEditor.getMapping( false, null, true );
           }
